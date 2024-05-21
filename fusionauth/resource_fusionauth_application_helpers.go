@@ -33,6 +33,16 @@ func buildApplication(data *schema.ResourceData) fusionauth.Application {
 			IdTokenKeyId:                    data.Get("jwt_configuration.0.id_token_key_id").(string),
 			RefreshTokenTimeToLiveInMinutes: data.Get("jwt_configuration.0.refresh_token_ttl_minutes").(int),
 			TimeToLiveInSeconds:             data.Get("jwt_configuration.0.ttl_seconds").(int),
+			RefreshTokenExpirationPolicy: fusionauth.RefreshTokenExpirationPolicy(data.Get("jwt_configuration.0.refresh_token_expiration_policy").(string)),
+			RefreshTokenRevocationPolicy: fusionauth.RefreshTokenRevocationPolicy{
+				OnLoginPrevented:  data.Get("jwt_configuration.0.refresh_token_revocation_policy_on_login_prevented").(bool),
+				OnPasswordChanged: data.Get("jwt_configuration.0.refresh_token_revocation_policy_on_password_change").(bool),
+			},
+			RefreshTokenUsagePolicy:         fusionauth.RefreshTokenUsagePolicy(data.Get("jwt_configuration.0.refresh_token_usage_policy").(string)),
+			TimeToLiveInSeconds:             data.Get("jwt_configuration.0.time_to_live_in_seconds").(int),
+			RefreshTokenSlidingWindowConfiguration: fusionauth.RefreshTokenSlidingWindowConfiguration{
+				MaximumTimeToLiveInMinutes: data.Get("jwt_configuration.0.refresh_token_sliding_window_maximum_time_to_live_in_minutes").(int),
+			},
 		},
 		LambdaConfiguration: fusionauth.LambdaConfiguration{
 			AccessTokenPopulateId:               data.Get("lambda_configuration.0.access_token_populate_id").(string),
